@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "424570134959",
+    "project_id": "swp-lotus-tracker",
+    "storage_bucket": "swp-lotus-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424570134959:android:dc5a08a924cef3d9020f5a",
+        "android_client_info": {
+          "package_name": "com.railsforbiz.swplotus.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKe41344l08WNZc_nHRD_lN8E_m2da94M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
