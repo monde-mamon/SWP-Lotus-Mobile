@@ -27,18 +27,11 @@ import CustomModal from '../components/CustomModal';
 import FourOrFour from '../screens/404';
 import Capture from '../screens/Capture';
 import ChangePassword from '../screens/ChangePassword';
-import CompleteDelivery from '../screens/CompleteDelivery';
 import DeliveryScreen from '../screens/Deliveries';
-import Home from '../screens/Home';
 import HomeDeliveryScreen from '../screens/HomeDelivery';
-import LoadTruck from '../screens/LoadTruck';
 import Login from '../screens/Login';
 import Maintainance from '../screens/Maintainance';
-import Receiving from '../screens/Receiving';
-import Return from '../screens/Return';
 import Settings from '../screens/Settings';
-import Stage from '../screens/Stage';
-import StorageLocation from '../screens/StorageLocation';
 import Update from '../screens/Update';
 import * as Services from '../services';
 import { Colors } from '../themes/colors';
@@ -136,12 +129,7 @@ function CustomDrawerContent(props) {
             <View style={styles.dividerContainer} />
 
             <DrawerItemList {...rest} {...props} />
-            {false && (
-              <DrawerItem
-                label={fetchLanguage[lang].ordersearch}
-                onPress={() => navigation.push('Capture')}
-              />
-            )}
+
             <DrawerItem
               label={fetchLanguage[lang].settings}
               onPress={() => navigation.navigate('Settings')}
@@ -182,81 +170,21 @@ function DrawerNavigator() {
       drawerStyle={styles.transparent}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
-      {true ? (
-        <>
-          <Drawer.Screen
-            name={fetchLanguage[lang].home_delivery}
-            component={HomeDeliveryScreen}
-            options={{
-              header: () => null,
-            }}
-          />
+      <Drawer.Screen
+        name={fetchLanguage[lang].home_delivery}
+        component={HomeDeliveryScreen}
+        options={{
+          header: () => null,
+        }}
+      />
 
-          <Drawer.Screen
-            name={fetchLanguage[lang].deliveries}
-            component={DeliveryScreen}
-            options={{
-              header: () => null,
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <Drawer.Screen
-            name={fetchLanguage[lang].home}
-            component={Home}
-            options={{
-              header: () => null,
-            }}
-          />
-
-          <Drawer.Screen
-            name={fetchLanguage[lang].receiving}
-            component={Receiving}
-            options={{
-              header: () => null,
-            }}
-          />
-          <Drawer.Screen
-            name={fetchLanguage[lang].completeDelivery}
-            component={CompleteDelivery}
-            options={{
-              header: () => null,
-            }}
-          />
-          <Drawer.Screen
-            name={fetchLanguage[lang].return}
-            component={Return}
-            options={{
-              header: () => null,
-            }}
-          />
-
-          <Drawer.Screen
-            name={fetchLanguage[lang].storagelocation}
-            component={StorageLocation}
-            options={{
-              header: () => null,
-            }}
-          />
-
-          <Drawer.Screen
-            name={fetchLanguage[lang].loadtruck}
-            component={LoadTruck}
-            options={{
-              header: () => null,
-            }}
-          />
-
-          <Drawer.Screen
-            name={fetchLanguage[lang].staging}
-            component={Stage}
-            options={{
-              header: () => null,
-            }}
-          />
-        </>
-      )}
+      <Drawer.Screen
+        name={fetchLanguage[lang].deliveries}
+        component={DeliveryScreen}
+        options={{
+          header: () => null,
+        }}
+      />
     </Drawer.Navigator>
   );
 }
