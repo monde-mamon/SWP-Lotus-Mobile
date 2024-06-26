@@ -63,7 +63,8 @@ const DeliveryStep2 = ({
       ...deliveryItemData,
       green_basket: state.number_of_green_basket,
       tray_sent_out: state.number_of_trays_sent,
-      tray_received_store: state.number_of_trays_received,
+      tray_received_store: state.number_of_trays_store_received,
+      tray_returned_to_hub: state.number_of_trays_hub_returned,
       notes: state.notes,
     };
     updateDeliveryMutate(
@@ -115,13 +116,28 @@ const DeliveryStep2 = ({
           />
 
           <CounterButton
-            title="Number of Trays Received"
+            title="Number of Trays Store Received"
             placeholder="0"
-            value={state.number_of_trays_received ?? ''}
-            disabled={!state.number_of_trays_received}
+            value={state.number_of_trays_store_received ?? ''}
+            disabled={!state.number_of_trays_store_received}
             error={''}
             onChange={(opr, val): void =>
-              handleOnChange(opr, 'number_of_trays_received', val)
+              handleOnChange(
+                opr,
+                'number_of_trays_store_received',
+                val
+              )
+            }
+          />
+
+          <CounterButton
+            title="Number of Trays Hub Returned"
+            placeholder="0"
+            value={state.number_of_trays_hub_returned ?? ''}
+            disabled={!state.number_of_trays_hub_returned}
+            error={''}
+            onChange={(opr, val): void =>
+              handleOnChange(opr, 'number_of_trays_hub_returned', val)
             }
           />
 

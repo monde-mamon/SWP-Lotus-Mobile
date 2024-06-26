@@ -27,9 +27,11 @@ import { authAtom, locationAtom } from '@/src/atom';
 
 const LoginScreen = (props) => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState('mond@lsctms.sys');
+  const [email, setEmail] = useState(
+    __DEV__ ? 'mond@lsctms.sys' : ''
+  );
   const [emailError, setEmailError] = useState('');
-  const [pass, setPass] = useState('testpassword');
+  const [pass, setPass] = useState(__DEV__ ? 'testpassword' : '');
   const setAuth = useSetAtom(authAtom);
   const setLocationConfig = useSetAtom(locationAtom);
   const [passError, setPassError] = useState('');
@@ -194,8 +196,6 @@ const LoginScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <StatusBar backgroundColor="#000" barStyle="light-content" /> */}
-
       {!initializing ? (
         <View
           style={{

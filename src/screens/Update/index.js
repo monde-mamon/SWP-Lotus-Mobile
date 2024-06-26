@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import {
   BackHandler,
   Image,
@@ -6,13 +7,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import { Colors } from '../../themes/colors';
 
-import {Colors} from '../../themes/colors';
-
-const UpdateScreen = ({route}) => {
-  console.log('woowow! : ', route);
-  const {data: BUILD_URL} = route.params || {};
+const UpdateScreen = ({ route }) => {
+  const { data: BUILD_URL } = route.params || {};
   const checkBackHandler = () => {
     return true;
   };
@@ -20,10 +18,16 @@ const UpdateScreen = ({route}) => {
     Linking.openURL(BUILD_URL);
   };
   useEffect(() => {
-    BackHandler.addEventListener('hardwareBackPress', checkBackHandler);
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      checkBackHandler
+    );
 
     return () => {
-      BackHandler.removeEventListener('hardwareBackPress', checkBackHandler);
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        checkBackHandler
+      );
     };
   }, [checkBackHandler]);
   return (
@@ -33,10 +37,11 @@ const UpdateScreen = ({route}) => {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
-      }}>
+      }}
+    >
       <Image
-        source={require('../../assets/images/lsc_logo.png')}
-        style={{height: 300, width: 300}}
+        source={require('../../assets/images/swp_logo.png')}
+        style={{ height: 300, width: 300 }}
         resizeMode={'contain'}
       />
       <Text>We have a new update, Please install!</Text>
@@ -48,8 +53,9 @@ const UpdateScreen = ({route}) => {
           backgroundColor: Colors.primary,
           marginTop: 40,
         }}
-        onPress={() => downloadNewUpdate()}>
-        <Text style={{color: '#fff'}}>UPDATE</Text>
+        onPress={() => downloadNewUpdate()}
+      >
+        <Text style={{ color: '#fff' }}>UPDATE</Text>
       </TouchableOpacity>
     </View>
   );

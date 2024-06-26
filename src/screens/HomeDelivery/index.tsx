@@ -235,8 +235,8 @@ const HomeDeliveryScreen = ({
                 />
 
                 <Row
-                  left="Status ID: "
-                  right={selectedHistory?.condition_code}
+                  left="Branch Name: "
+                  right={selectedHistory?.branch_name}
                 />
               </View>
             </>

@@ -32,7 +32,7 @@ export const Header: FC<HeaderProps> = ({
       <View style={{ alignSelf: 'flex-start', flexDirection: 'row' }}>
         <Text
           style={{
-            color: '#ff601f',
+            color: Colors.primary,
             fontSize: RFValue(18),
             fontWeight: 'bold',
             top: 5,

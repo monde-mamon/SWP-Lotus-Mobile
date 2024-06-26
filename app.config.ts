@@ -10,11 +10,11 @@ export default {
     owner: 'railsforbiz',
     version: '0.0.1',
     orientation: 'portrait',
-    icon: './src/assets/images/lsc_logo.png',
+    icon: './src/assets/images/swp_logo.png',
     scheme: 'myapp',
     userInterfaceStyle: 'automatic',
     splash: {
-      image: './src/assets/images/lsc_logo.png',
+      image: './src/assets/images/swp_logo.png',
       resizeMode: 'contain',
       backgroundColor: '#ffffff',
     },
@@ -24,7 +24,7 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: './src/assets/images/lsc_logo.png',
+        foregroundImage: './src/assets/images/swp_logo.png',
         backgroundColor: '#ffffff',
       },
       package: 'com.railsforbiz.swplotus.app',
@@ -62,11 +62,11 @@ export default {
       env: process.env.APP_ENV,
       apiURL: process.env.EXPO_PUBLIC_API_URL,
       eas: {
-        projectId: '1574ecc6-cf65-414d-815a-dbeb7af0f193',
+        projectId: '6cd8f5d2-f124-4985-9f96-e2f7acf406bd',
       },
     },
     updates: {
-      url: 'https://u.expo.dev/1574ecc6-cf65-414d-815a-dbeb7af0f193',
+      url: 'https://u.expo.dev/6cd8f5d2-f124-4985-9f96-e2f7acf406bd',
     },
     runtimeVersion: {
       policy: 'appVersion',

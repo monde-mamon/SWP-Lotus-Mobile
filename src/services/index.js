@@ -51,14 +51,14 @@ export const retrieveData = async (key) => {
 export const getApiURL = async () => {
   try {
     const api_url = await retrieveData('api_url');
-    console.log('hinahanap mo BOI : ', process.env.API_URL);
-    return 'http://mglsgp1.railsfor.biz:3111/api/v1';
+    console.log('hinahanap mo BOI : ', api_url);
+    return api_url || process.env.API_URL;
 
     // return api_url;
   } catch (error) {
     console.log('getApiURL error :::', error);
     // return process.env.API_URL;
-    return 'http://mglsgp1.railsfor.biz:3111/api/v1';
+    return process.env.API_URL;
   }
 };
 
