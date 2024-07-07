@@ -9,8 +9,12 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Signature, {
   SignatureViewRef,
 } from 'react-native-signature-canvas';
-import { DeliveryStep3Props, initialState } from './form';
-import { newDeliveryAtom } from '@/src/atom';
+import {
+  DeliveryStep3Props,
+  SignatureImage,
+  initialState,
+} from './form';
+import { languageAtom, newDeliveryAtom } from '@/src/atom';
 import { Container } from '@/src/components/container';
 import CustomModal from '@/src/components/CustomModal';
 import { PictureButton } from '@/src/components/picture-button';
@@ -28,11 +32,12 @@ const DeliveryStep3 = ({
   const [successLoading, setSuccessLoading] = useState(true);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const ref = useRef<SignatureViewRef>(null);
+  const [lang] = useAtom(languageAtom);
 
   const [state, setState] = useState<{
     picture_1: Image | null;
     picture_2: Image | null;
-    signature: { data: string; mime: string } | null;
+    signature: SignatureImage | null;
   }>(initialState);
 
   const [
@@ -56,7 +61,9 @@ const DeliveryStep3 = ({
     });
   };
 
-  const uploadPhoto = (image: Image | null): void => {
+  const uploadPhoto = (
+    image: Image | SignatureImage | null
+  ): void => {
     if (!image) return;
     const temp = {
       delivery_id: newDelivery?.id,
@@ -78,6 +85,7 @@ const DeliveryStep3 = ({
     await Promise.all([
       uploadPhoto(state.picture_1),
       uploadPhoto(state.picture_2),
+      uploadPhoto(state.signature),
     ]).then(() => {
       const delivery = {
         id: newDelivery?.id as number,
@@ -132,7 +140,7 @@ const DeliveryStep3 = ({
       >
         <>
           <PictureButton
-            title="Picture 1"
+            title={lang.picture_1}
             item={state.picture_1 as Image}
             onPress={(): Promise<void> => openCamera('picture_1')}
             onClear={(): void =>
@@ -141,7 +149,7 @@ const DeliveryStep3 = ({
             error={''}
           />
           <PictureButton
-            title="Picture 2"
+            title={lang.picture_2}
             item={state.picture_2 as Image}
             onPress={(): Promise<void> => openCamera('picture_2')}
             onClear={(): void =>
@@ -150,7 +158,7 @@ const DeliveryStep3 = ({
             error={''}
           />
           <View style={{ height: 300, gap: 10, paddingVertical: 10 }}>
-            <Text>Signature</Text>
+            <Text>{lang.signature}</Text>
 
             <Signature
               ref={ref}
@@ -171,13 +179,16 @@ const DeliveryStep3 = ({
               imageType="image/jpeg"
               trimWhitespace
             />
-            <Button title="Clear" onPress={handleOnPressClear} />
+            <Button title={lang.clear} onPress={handleOnPressClear} />
           </View>
         </>
       </ScrollView>
       <View style={{ height: hp('10%') }} />
 
-      <PrimaryButton onSubmit={handleOnPressSubmit} title="Done" />
+      <PrimaryButton
+        onSubmit={handleOnPressSubmit}
+        title={lang.done}
+      />
     </Container>
   );
 };

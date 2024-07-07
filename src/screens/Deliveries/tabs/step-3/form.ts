@@ -8,3 +8,8 @@ export interface DeliveryStep3Props {
   isReset: boolean;
   isActive: boolean;
 }
+
+export interface SignatureImage {
+  data: string;
+  mime: string;
+}

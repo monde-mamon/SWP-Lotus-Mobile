@@ -14,7 +14,7 @@ import {
   getInitialValues,
   initialState,
 } from './form';
-import { authAtom, newDeliveryAtom } from '@/src/atom';
+import { authAtom, languageAtom, newDeliveryAtom } from '@/src/atom';
 import { Container } from '@/src/components/container';
 import { DateTimePicker } from '@/src/components/date-time-picker';
 import { DropDownPicker } from '@/src/components/drop-down-picker';
@@ -53,6 +53,7 @@ const DeliveryStep1 = ({
   const formikRef = useRef<FormikProps<Step1FormSchema>>(null);
   const scrollRef = useRef<ScrollView>(null);
   const [auth] = useAtom(authAtom);
+  const [lang] = useAtom(languageAtom);
   const setNewDelivery = useSetAtom(newDeliveryAtom);
 
   const [
@@ -170,7 +171,7 @@ const DeliveryStep1 = ({
         visible={hubStateVisible}
         loading={hubIsLoading}
         onTouchOutside={onHubToggle}
-        title="Choose Hub"
+        title={`${lang.choose} ${lang.hub_id}`}
         error={hubIsError}
         content={hubData as unknown as Hub[]}
         refetch={hubRefetch}
@@ -195,7 +196,7 @@ const DeliveryStep1 = ({
         visible={driverStateVisible}
         loading={driverIsLoading}
         onTouchOutside={onDriverToggle}
-        title="Choose Driver"
+        title={`${lang.choose} ${lang.driver}`}
         error={driverIsError}
         content={driverData as unknown as Driver[]}
         refetch={driverRefetch}
@@ -220,7 +221,7 @@ const DeliveryStep1 = ({
         visible={storeStateVisible}
         loading={storeIsLoading}
         onTouchOutside={onStoreToggle}
-        title="Choose Store"
+        title={`${lang.choose} ${lang.store}`}
         error={storeIsError}
         content={physicalStoreData as unknown as Store[]}
         onSelect={(
@@ -248,7 +249,7 @@ const DeliveryStep1 = ({
         visible={deliveryConditionVisible}
         loading={deliveryConditionIsLoading}
         onTouchOutside={onDeliveryConditionToggle}
-        title="Choose Delivery Status"
+        title={`${lang.choose} ${lang.delivery_condition}`}
         error={deliveryConditionIsError}
         content={
           deliveryConditionData as unknown as DeliveryCondition[]
@@ -277,7 +278,7 @@ const DeliveryStep1 = ({
         visible={deliveryStateVisible}
         loading={deliveryStatusIsLoading}
         onTouchOutside={onDeliveryStatusToggle}
-        title="Choose Delivery Status"
+        title={`${lang.choose} ${lang.delivery_status}`}
         error={deliveryStatusIsError}
         content={deliveryStatusData as unknown as DeliveryStatus[]}
         onSelect={(
@@ -326,8 +327,8 @@ const DeliveryStep1 = ({
             >
               <>
                 <DropDownPicker
-                  title="Hub_ID"
-                  placeholder="Click here"
+                  title={lang.hub_id}
+                  placeholder={lang.click_here}
                   value={values.hub_id}
                   onPress={(): void => onHubToggle()}
                   error={errors.hub_id}
@@ -342,8 +343,8 @@ const DeliveryStep1 = ({
                 />
 
                 <DropDownPicker
-                  title="Sender's Name"
-                  placeholder="Click here"
+                  title={lang.senders_name}
+                  placeholder={lang.click_here}
                   value={values.senders_name}
                   onPress={(): void => onDriverToggle()}
                   error={errors.senders_name}
@@ -358,8 +359,8 @@ const DeliveryStep1 = ({
                 />
 
                 <DropDownPicker
-                  title="Driver's License Plate"
-                  placeholder="Click here"
+                  title={lang.drivers_license_plate}
+                  placeholder={lang.click_here}
                   value={
                     auth?.user.truck_license ??
                     state.driver_details.license_plate
@@ -376,8 +377,8 @@ const DeliveryStep1 = ({
                 />
 
                 <DropDownPicker
-                  title="Branch Name"
-                  placeholder="Click here"
+                  title={lang.branch_name}
+                  placeholder={lang.click_here}
                   value={values.name_of_sending_branch}
                   onPress={(): void => onStoreToggle()}
                   error={errors.name_of_sending_branch}
@@ -390,7 +391,7 @@ const DeliveryStep1 = ({
                   }
                 />
                 <DateTimePicker
-                  title="Time In:"
+                  title={lang.branch_name}
                   placeholder="Choose Date"
                   value={values.entry_date_and_time}
                   minDate={moment().subtract(1, 'days').toDate()}
@@ -408,8 +409,8 @@ const DeliveryStep1 = ({
                 />
 
                 <DropDownPicker
-                  title="Delivery Condition"
-                  placeholder="Click here"
+                  title={lang.delivery_condition}
+                  placeholder={lang.click_here}
                   value={values.delivery_condition}
                   onPress={(): void => onDeliveryConditionToggle()}
                   error={errors.delivery_condition}
@@ -423,8 +424,8 @@ const DeliveryStep1 = ({
                 />
 
                 <DropDownPicker
-                  title="Delivery Status"
-                  placeholder="Click here"
+                  title={lang.delivery_status}
+                  placeholder={lang.click_here}
                   value={values.delivery_status}
                   onPress={(): void => onDeliveryStatusToggle()}
                   error={errors.delivery_status}
@@ -440,7 +441,10 @@ const DeliveryStep1 = ({
                 <View style={{ height: hp('10%') }} />
               </>
             </ScrollView>
-            <PrimaryButton onSubmit={handleSubmit} title="Submit" />
+            <PrimaryButton
+              onSubmit={handleSubmit}
+              title={lang.submit}
+            />
           </>
         )}
       </Formik>

@@ -1,4 +1,5 @@
 import { Tab, TabView } from '@rneui/themed';
+import { useAtom } from 'jotai';
 import { delay } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
@@ -8,6 +9,7 @@ import { Colors } from '../../themes/colors';
 import DeliveryStep1 from './tabs/step-1';
 import DeliveryStep2 from './tabs/step-2';
 import DeliveryStep3 from './tabs/step-3';
+import { languageAtom } from '@/src/atom';
 import { useBackHandler } from '@/src/hooks/use-back-handler';
 import { DeliveryScreenProps } from '@/src/navigation/types';
 
@@ -15,6 +17,7 @@ const DeliveryScreen = ({
   navigation,
 }: DeliveryScreenProps): JSX.Element => {
   const [index, setIndex] = useState(0);
+  const [lang] = useAtom(languageAtom);
   const [isRefreshing, setRefreshing] = useState<boolean>(false);
   useBackHandler();
   useEffect(() => {
@@ -30,7 +33,7 @@ const DeliveryScreen = ({
   const handleOnPressReset = (): void =>
     Alert.alert(
       '',
-      'Do you want to discard your changes?',
+      `${lang.do_you_want_to_discard_your_changes}`,
       [
         {
           text: 'OK',
@@ -44,7 +47,7 @@ const DeliveryScreen = ({
     <View style={styles.container}>
       <View style={{ padding: wp('4%') }}>
         <Header
-          title={'DELIVERIES'}
+          title={lang.deliveries}
           navigation={navigation}
           onReset={handleOnPressReset}
           isCustom
@@ -64,7 +67,7 @@ const DeliveryScreen = ({
         <Tab.Item
           disabled
           disabledStyle={styles.bgWhite}
-          title="Step 1"
+          title={lang.step_1}
           titleStyle={styles.tabItemStyle}
           icon={{
             name: 'people-outline',
@@ -75,7 +78,7 @@ const DeliveryScreen = ({
         <Tab.Item
           disabled
           disabledStyle={styles.bgWhite}
-          title="Step 2"
+          title={lang.step_2}
           titleStyle={styles.tabItemStyle}
           icon={{
             name: 'document-text-outline',
@@ -86,7 +89,7 @@ const DeliveryScreen = ({
         <Tab.Item
           disabled
           disabledStyle={styles.bgWhite}
-          title="Step 3"
+          title={lang.step_3}
           titleStyle={styles.tabItemStyle}
           icon={{
             name: 'image-outline',

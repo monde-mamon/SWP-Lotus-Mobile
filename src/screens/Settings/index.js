@@ -1,5 +1,5 @@
-import * as Services from '../../services';
-
+import { useAtom } from 'jotai';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -9,7 +9,6 @@ import {
   StatusBar,
   Switch,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -19,28 +18,22 @@ import {
   ModalContent,
   ScaleAnimation,
 } from 'react-native-modals';
-import React, { useEffect, useState } from 'react';
-import {
-  heightPercentageToDP as hp,
-  listenOrientationChange as loc,
-  removeOrientationListener as rol,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-
-import { Colors } from '../../themes/colors';
-import CustomTextInput from '../../components/CustomTextInput';
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import fetchLanguage from '../../utils/language';
+import CustomTextInput from '../../components/CustomTextInput';
+import * as Services from '../../services';
+import { Colors } from '../../themes/colors';
 import firebaseRemoteConfig from '../../utils/firebase';
-import { authAtom } from '@/src/atom';
-import { useAtom } from 'jotai';
+import { authAtom, languageAtom } from '@/src/atom';
+import { language } from '@/src/utils/language';
 
-const Settings = ({ route, navigation }) => {
+const Settings = ({ navigation }) => {
   const [langVisible, setLangVisible] = useState(false);
   const [verifypassVisible, setVerifypassVisible] = useState(false);
   const [user] = useAtom(authAtom);
   const [requestedLang, setRequestedLang] = useState('ENG');
-  const [lang, setLang] = useState(0);
+  const [isShowLocation] = useState(false);
+  const [lang, setLang] = useAtom(languageAtom);
   const [isPDAMode, setIsPDAMode] = useState(false);
   const [hidePDAMode, setHidePDAMode] = useState(false);
   const [isLocation, setIsLocation] = useState(false);
@@ -98,12 +91,14 @@ const Settings = ({ route, navigation }) => {
       Services.updateUser(user?.user?.id, params).then((res) => {
         console.log('CHANGE LANGUAGE SCREEN ! : ', res);
         // setModalVisible(true);
-        const temp = user;
-        temp.language = requestedLang;
+        const temp = {
+          user: { ...user.user, language: requestedLang },
+        };
+
         console.log('yow!!:', temp);
 
         Services.storeData('user', temp);
-
+        setLang(language[requestedLang]);
         if (res === 'success') {
           Alert.alert(
             '',
@@ -159,7 +154,6 @@ const Settings = ({ route, navigation }) => {
     Services.retrieveData('user').then((res) => {
       if (res || res.status !== 'failed') {
         setUser(res);
-        setLang(res.language === 'ENG' ? 0 : 1);
       }
     });
     Services.retrieveData('ispdamode').then((res) => {
@@ -179,7 +173,6 @@ const Settings = ({ route, navigation }) => {
     task();
   }, []);
 
-  const [isShowLocation] = useState(false);
   return (
     <>
       <StatusBar
@@ -218,7 +211,7 @@ const Settings = ({ route, navigation }) => {
             paddingStart: 20,
           }}
         >
-          {fetchLanguage[lang].settings}
+          {lang.settings}
         </Text>
       </View>
 
@@ -237,7 +230,7 @@ const Settings = ({ route, navigation }) => {
             color: Colors.black,
           }}
         >
-          {fetchLanguage[lang].account}
+          {lang.account}
         </Text>
 
         <TouchableOpacity
@@ -261,7 +254,7 @@ const Settings = ({ route, navigation }) => {
               color: Colors.black,
             }}
           >
-            {fetchLanguage[lang].changepassword}
+            {lang.changepassword}
           </Text>
         </TouchableOpacity>
         <View
@@ -294,7 +287,7 @@ const Settings = ({ route, navigation }) => {
               color: Colors.black,
             }}
           >
-            {fetchLanguage[lang].changelanguage}
+            {lang.changelanguage}
           </Text>
         </TouchableOpacity>
         {isShowLocation && (
@@ -320,7 +313,7 @@ const Settings = ({ route, navigation }) => {
                   color: Colors.black,
                 }}
               >
-                {fetchLanguage[lang].location}
+                {lang.location}
               </Text>
             </View>
             <Switch
@@ -355,7 +348,7 @@ const Settings = ({ route, navigation }) => {
                   color: Colors.black,
                 }}
               >
-                {fetchLanguage[lang].isPDAMODE}
+                {lang.isPDAMODE}
               </Text>
             </View>
             <Switch
@@ -394,7 +387,7 @@ const Settings = ({ route, navigation }) => {
                   color: Colors.black,
                 }}
               >
-                {fetchLanguage[lang].chooselanguage}
+                {lang.chooselanguage}
               </Text>
             </View>
           </View>
