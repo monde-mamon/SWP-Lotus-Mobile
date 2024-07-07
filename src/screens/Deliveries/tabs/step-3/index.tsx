@@ -1,11 +1,14 @@
 import { useAtom } from 'jotai';
 import { delay, isNull } from 'lodash';
-import { useEffect, useState } from 'react';
-import { Alert, ScrollView, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Alert, ScrollView, View, Button, Text } from 'react-native';
 import ImageCropPicker, {
   Image,
 } from 'react-native-image-crop-picker';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Signature, {
+  SignatureViewRef,
+} from 'react-native-signature-canvas';
 import { DeliveryStep3Props, initialState } from './form';
 import { newDeliveryAtom } from '@/src/atom';
 import { Container } from '@/src/components/container';
@@ -23,10 +26,13 @@ const DeliveryStep3 = ({
   const [{ data, isError, mutate }] = useAtom(uploadPhotoAtom);
   const [successVisible, setSuccessVisible] = useState(false);
   const [successLoading, setSuccessLoading] = useState(true);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const ref = useRef<SignatureViewRef>(null);
 
   const [state, setState] = useState<{
     picture_1: Image | null;
     picture_2: Image | null;
+    signature: { data: string; mime: string } | null;
   }>(initialState);
 
   const [
@@ -65,6 +71,10 @@ const DeliveryStep3 = ({
       Alert.alert('Attach at least one image');
       return;
     }
+    if (isNull(state.signature)) {
+      Alert.alert('Please add your signature');
+      return;
+    }
     await Promise.all([
       uploadPhoto(state.picture_1),
       uploadPhoto(state.picture_2),
@@ -83,6 +93,13 @@ const DeliveryStep3 = ({
     onSubmit();
   };
 
+  const handleOnPressClear = (): void => {
+    ref.current?.clearSignature();
+    setState({
+      ...state,
+      signature: null,
+    });
+  };
   useEffect(() => {
     if (
       data &&
@@ -109,20 +126,53 @@ const DeliveryStep3 = ({
         onTouchOutside={onTouchOutSideToLogout}
         text="Delivery Item Uploaded!"
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={scrollEnabled}
+      >
         <>
           <PictureButton
             title="Picture 1"
             item={state.picture_1 as Image}
             onPress={(): Promise<void> => openCamera('picture_1')}
+            onClear={(): void =>
+              setState({ ...state, picture_1: null })
+            }
             error={''}
           />
           <PictureButton
             title="Picture 2"
             item={state.picture_2 as Image}
             onPress={(): Promise<void> => openCamera('picture_2')}
+            onClear={(): void =>
+              setState({ ...state, picture_2: null })
+            }
             error={''}
           />
+          <View style={{ height: 300, gap: 10, paddingVertical: 10 }}>
+            <Text>Signature</Text>
+
+            <Signature
+              ref={ref}
+              onBegin={(): void => setScrollEnabled(false)}
+              onEnd={(): void => {
+                setScrollEnabled(true);
+                ref.current?.readSignature();
+              }}
+              onOK={(text: string): void =>
+                setState({
+                  ...state,
+                  signature: { data: text, mime: 'image/jpeg' },
+                })
+              }
+              descriptionText=""
+              clearText=""
+              confirmText=""
+              imageType="image/jpeg"
+              trimWhitespace
+            />
+            <Button title="Clear" onPress={handleOnPressClear} />
+          </View>
         </>
       </ScrollView>
       <View style={{ height: hp('10%') }} />

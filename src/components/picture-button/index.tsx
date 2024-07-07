@@ -21,11 +21,13 @@ interface PictureButtonProps {
   item: Image | null;
   rightIcon?: JSX.Element;
   onPress: () => void;
+  onClear?: () => void;
   disabled?: boolean;
 }
 export const PictureButton: FC<PictureButtonProps> = ({
   title,
   onPress,
+  onClear,
   disabled,
   error,
   item,
@@ -55,7 +57,7 @@ export const PictureButton: FC<PictureButtonProps> = ({
         <>
           <TouchableOpacity
             style={styles.closeContainer}
-            onPress={onPress}
+            onPress={onClear}
           >
             <Ionicon
               name={'close-circle-outline'}
@@ -102,6 +104,7 @@ const styles = StyleSheet.create({
     width: '100%',
     resizeMode: 'cover',
     borderRadius: 5,
+    zIndex: 50,
   },
   closeContainer: {
     top: 10,
