@@ -62,15 +62,25 @@ const DeliveryStep3 = ({
   };
 
   const uploadPhoto = (
-    image: Image | SignatureImage | null
+    image: Image | SignatureImage | null,
+    isSignature?: boolean
   ): void => {
     if (!image) return;
     const temp = {
       delivery_id: newDelivery?.id,
-      image: `data:${image.mime};base64,${image.data}`,
+      image: isSignature
+        ? image.data
+        : `data:${image.mime};base64,${image.data}`,
     };
 
     mutate(temp);
+  };
+
+  const handleOK = (signature: string): void => {
+    setState({
+      ...state,
+      signature: { data: signature, mime: 'image/jpeg' },
+    });
   };
 
   const handleOnPressSubmit = async (): Promise<void> => {
@@ -85,7 +95,7 @@ const DeliveryStep3 = ({
     await Promise.all([
       uploadPhoto(state.picture_1),
       uploadPhoto(state.picture_2),
-      uploadPhoto(state.signature),
+      uploadPhoto(state.signature, true),
     ]).then(() => {
       const delivery = {
         id: newDelivery?.id as number,
@@ -167,17 +177,32 @@ const DeliveryStep3 = ({
                 setScrollEnabled(true);
                 ref.current?.readSignature();
               }}
-              onOK={(text: string): void =>
-                setState({
-                  ...state,
-                  signature: { data: text, mime: 'image/jpeg' },
-                })
-              }
+              onOK={handleOK}
               descriptionText=""
               clearText=""
               confirmText=""
               imageType="image/jpeg"
               trimWhitespace
+              style={{
+                backgroundColor: 'transparent',
+              }}
+              webviewContainerStyle={{
+                backgroundColor: 'transparent',
+              }}
+              webStyle={`
+                  .m-signature-pad {
+                    background-color: transparent;
+                  }
+                  .m-signature-pad {
+                    flex: 1;
+                    box-shadow: none;
+                    border-radius: 10px;
+                  }
+                  .m-signature-pad--footer {
+                    display: none;
+                  }
+                  `}
+              backgroundColor="rgb(255,255,255)"
             />
             <Button title={lang.clear} onPress={handleOnPressClear} />
           </View>
