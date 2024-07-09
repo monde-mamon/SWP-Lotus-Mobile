@@ -38,6 +38,7 @@ import {
 } from '@/src/schema';
 import { storeData } from '@/src/services';
 import { Colors } from '@/src/themes/colors';
+import { language } from '@/src/utils/language';
 const DeliveryStep1 = ({
   onSubmit,
   isReset,
@@ -119,6 +120,7 @@ const DeliveryStep1 = ({
     const delivery = {
       hub_code:
         auth?.user?.hub_code ?? Number(state.hub_details.hub_id),
+      // hub_description: Number(state.hub_details.hub_description),
       branch_name: state.store_details.store_name,
       time_in: values.entry_date_and_time,
       time_out: values.entry_date_and_time,
@@ -165,6 +167,7 @@ const DeliveryStep1 = ({
     }
   }, [isReset]);
 
+  const isEnglish = lang.tryagain === language.ENG.tryagain;
   return (
     <Container style={{ flex: 1, paddingHorizontal: 15 }}>
       <BottomModal
@@ -190,6 +193,7 @@ const DeliveryStep1 = ({
             (val as Hub).hub_description
           );
         }}
+        isEnglish={isEnglish}
       />
 
       <BottomModal
@@ -215,6 +219,7 @@ const DeliveryStep1 = ({
           );
           formikRef?.current?.setFieldError('senders_name', '');
         }}
+        isEnglish={isEnglish}
       />
 
       <BottomModal
@@ -243,6 +248,7 @@ const DeliveryStep1 = ({
           );
         }}
         refetch={storeRefetch}
+        isEnglish={isEnglish}
       />
 
       <BottomModal
@@ -268,11 +274,14 @@ const DeliveryStep1 = ({
           });
           formikRef?.current?.setFieldValue(
             'delivery_condition',
-            (val as DeliveryCondition).condition_description
+            isEnglish
+              ? (val as DeliveryCondition).condition_description
+              : (val as DeliveryCondition).condition_description_thai
           );
           formikRef?.current?.setFieldError('delivery_condition', '');
         }}
         refetch={deliveryConditionRefetch}
+        isEnglish={isEnglish}
       />
       <BottomModal
         visible={deliveryStateVisible}
@@ -295,11 +304,14 @@ const DeliveryStep1 = ({
           });
           formikRef?.current?.setFieldValue(
             'delivery_status',
-            (val as DeliveryStatus).status_eng
+            isEnglish
+              ? (val as DeliveryStatus).status_eng
+              : (val as DeliveryStatus).status_thai
           );
           formikRef?.current?.setFieldError('delivery_status', '');
         }}
         refetch={deliveryStatusRefetch}
+        isEnglish={isEnglish}
       />
       <Formik
         innerRef={formikRef}
@@ -391,7 +403,7 @@ const DeliveryStep1 = ({
                   }
                 />
                 <DateTimePicker
-                  title={lang.branch_name}
+                  title={lang.time_in}
                   placeholder="Choose Date"
                   value={values.entry_date_and_time}
                   minDate={moment().subtract(1, 'days').toDate()}

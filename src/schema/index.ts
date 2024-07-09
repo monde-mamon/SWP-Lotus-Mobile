@@ -208,4 +208,5 @@ export interface Language {
   store: string;
   done: string;
   clear: string;
+  store_name: string;
 }

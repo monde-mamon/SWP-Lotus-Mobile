@@ -76,7 +76,7 @@ const HomeDeliveryScreen = ({
     >
       <View style={{ width: wp('30%') }}>
         <Text style={{ color: Colors.black }} numberOfLines={1}>
-          {item.row_code}
+          {item.branch_name}
         </Text>
       </View>
       <View
@@ -161,7 +161,8 @@ const HomeDeliveryScreen = ({
   }, []);
 
   useEffect(() => {
-    if (isError) {
+    //@ts-ignore
+    if (data?.error === 'Not Authorized') {
       setLogoutVisible(true);
       setTimeout(() => {
         setLogoutLoading(false);
@@ -183,7 +184,7 @@ const HomeDeliveryScreen = ({
         <>
           <View style={styles.row}>
             <Text style={[styles.bold, { width: wp('25%') }]}>
-              {lang.bill_no}
+              {lang.store_name}
             </Text>
             <Text style={styles.bold}>{lang.driver}</Text>
             <Text style={styles.bold}>{lang.status_id}</Text>
@@ -216,12 +217,12 @@ const HomeDeliveryScreen = ({
             <>
               <View style={styles.modelContent}>
                 <Row
-                  left="Date : "
+                  left={`${lang.date} :`}
                   right={selectedHistory?.time_in}
                 />
 
                 <Row
-                  left="Branch Name: "
+                  left={`${lang.store_name} :`}
                   right={selectedHistory?.branch_name}
                 />
               </View>
