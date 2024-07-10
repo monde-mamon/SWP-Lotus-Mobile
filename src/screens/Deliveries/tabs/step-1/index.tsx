@@ -120,7 +120,6 @@ const DeliveryStep1 = ({
     const delivery = {
       hub_code:
         auth?.user?.hub_code ?? Number(state.hub_details.hub_id),
-      // hub_description: Number(state.hub_details.hub_description),
       branch_name: state.store_details.store_name,
       time_in: values.entry_date_and_time,
       time_out: values.entry_date_and_time,
@@ -341,7 +340,7 @@ const DeliveryStep1 = ({
                 <DropDownPicker
                   title={lang.hub_id}
                   placeholder={lang.click_here}
-                  value={values.hub_id}
+                  value={auth?.user?.hub_name ?? values.hub_id}
                   onPress={(): void => onHubToggle()}
                   error={errors.hub_id}
                   disabled={!!auth?.user.hub_code}

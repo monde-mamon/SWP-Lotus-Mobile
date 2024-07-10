@@ -84,6 +84,7 @@ export interface Auth {
     truck_license?: string;
     hub_code?: string;
     route_code?: string;
+    hub_name?: string;
   };
   auth_token: string;
 }
