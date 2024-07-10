@@ -39,6 +39,7 @@ interface BottomModalProps {
   onSelect: (
     val: Hub | Store | Driver | DeliveryStatus | DeliveryCondition
   ) => void;
+  isEnglish?: boolean;
 }
 export const BottomModal: FC<BottomModalProps> = ({
   onTouchOutside,
@@ -49,6 +50,7 @@ export const BottomModal: FC<BottomModalProps> = ({
   content,
   refetch,
   onSelect,
+  isEnglish,
 }) => (
   <RNBottomModal
     visible={visible}
@@ -101,12 +103,19 @@ export const BottomModal: FC<BottomModalProps> = ({
                     ]}
                   >
                     <Text>
-                      {(data as Hub)?.hub_description ??
-                        (data as Driver)?.driver_name ??
-                        (data as Store)?.store_name ??
-                        (data as DeliveryStatus)?.status_eng ??
-                        (data as DeliveryCondition)
-                          ?.condition_description}
+                      {isEnglish
+                        ? (data as Hub)?.hub_description ??
+                          (data as Driver)?.driver_name ??
+                          (data as Store)?.store_name ??
+                          (data as DeliveryStatus)?.status_eng ??
+                          (data as DeliveryCondition)
+                            ?.condition_description
+                        : (data as Hub)?.hub_description ??
+                          (data as Driver)?.driver_name ??
+                          (data as Store)?.store_name ??
+                          (data as DeliveryStatus)?.status_thai ??
+                          (data as DeliveryCondition)
+                            ?.condition_description_thai}
                     </Text>
                   </Pressable>
                 ))}

@@ -9,7 +9,7 @@ export const GPSLocationHandler = (): JSX.Element => {
   const [auth] = useAtom(authAtom);
   const [location] = useAtom(locationAtom);
   const task = async (): Promise<void> => {
-    if (!auth?.user?.email) {
+    if (auth?.user?.email) {
       const { status } =
         await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') return;

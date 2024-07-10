@@ -23,7 +23,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import * as Services from '../../services';
 import { Colors } from '../../themes/colors';
 import firebaseRemoteConfig from '../../utils/firebase';
-import { authAtom, locationAtom } from '@/src/atom';
+import { authAtom, languageAtom, locationAtom } from '@/src/atom';
+import { language } from '@/src/utils/language';
 
 const LoginScreen = (props) => {
   const navigation = useNavigation();
@@ -34,6 +35,7 @@ const LoginScreen = (props) => {
   const [pass, setPass] = useState(__DEV__ ? 'testpassword' : '');
   const setAuth = useSetAtom(authAtom);
   const setLocationConfig = useSetAtom(locationAtom);
+  const setLang = useSetAtom(languageAtom);
   const [passError, setPassError] = useState('');
   const [showPass, setShowPass] = useState(true);
   const [initializing, setInitializing] = useState(
@@ -85,6 +87,11 @@ const LoginScreen = (props) => {
             clearFields();
             goToHomeScreen();
             setLoading(false);
+            setLang(
+              response?.user?.language === 'ENG'
+                ? language.ENG
+                : language.THAI
+            );
           } else {
             setEmailError('Credentials does not match');
             setPassError('Credentials does not match');
@@ -176,6 +183,11 @@ const LoginScreen = (props) => {
                 clearFields();
                 goToHomeScreen();
                 setInitializing(true);
+                setLang(
+                  res?.user?.language === 'ENG'
+                    ? language.ENG
+                    : language.THAI
+                );
               }
             });
           }

@@ -22,6 +22,7 @@ import {
   createStep2Atom,
   deliveryItemAtom,
 } from '@/src/queries';
+import { languageAtom } from '@/src/atom';
 
 const DeliveryStep2 = ({
   onSubmit,
@@ -29,6 +30,7 @@ const DeliveryStep2 = ({
   isActive,
 }: DeliveryStep2Props): JSX.Element => {
   const [state, setState] = useState(initialState);
+  const [lang] = useAtom(languageAtom);
   const [{ data: deliveryItemData, refetch }] =
     useAtom(deliveryItemAtom);
   const handleOnChange = (
@@ -94,7 +96,7 @@ const DeliveryStep2 = ({
       <ScrollView showsVerticalScrollIndicator={false}>
         <>
           <CounterButton
-            title="Number of Trays sent"
+            title={lang.number_of_trays_sent}
             placeholder="0"
             value={state.number_of_trays_sent ?? ''}
             disabled={!state.number_of_trays_sent}
@@ -105,7 +107,7 @@ const DeliveryStep2 = ({
           />
 
           <CounterButton
-            title="Number of Green Basket"
+            title={lang.number_of_green_basket}
             placeholder="0"
             value={state.number_of_green_basket ?? ''}
             disabled={!state.number_of_green_basket}
@@ -116,7 +118,7 @@ const DeliveryStep2 = ({
           />
 
           <CounterButton
-            title="Number of Trays Store Received"
+            title={lang.number_of_trays_store_received}
             placeholder="0"
             value={state.number_of_trays_store_received ?? ''}
             disabled={!state.number_of_trays_store_received}
@@ -131,7 +133,7 @@ const DeliveryStep2 = ({
           />
 
           <CounterButton
-            title="Number of Trays Hub Returned"
+            title={lang.number_of_trays_hub_returned}
             placeholder="0"
             value={state.number_of_trays_hub_returned ?? ''}
             disabled={!state.number_of_trays_hub_returned}
@@ -142,7 +144,7 @@ const DeliveryStep2 = ({
           />
 
           <View>
-            <Text style={styles.notesTitle}>Notes</Text>
+            <Text style={styles.notesTitle}>{lang.notes}</Text>
 
             <TextInput
               style={styles.notesTextInput}
@@ -156,7 +158,10 @@ const DeliveryStep2 = ({
         </>
       </ScrollView>
 
-      <PrimaryButton onSubmit={handleOnPressSubmit} title="Submit" />
+      <PrimaryButton
+        onSubmit={handleOnPressSubmit}
+        title={lang.submit}
+      />
     </Container>
   );
 };

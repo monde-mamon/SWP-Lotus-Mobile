@@ -20,8 +20,7 @@ import { Header } from '../../components/Header';
 import Row from '../../components/Row';
 import * as Services from '../../services';
 import { Colors } from '../../themes/colors';
-import fetchLanguage from '../../utils/language';
-import { authAtom } from '@/src/atom';
+import { languageAtom } from '@/src/atom';
 import { useBackHandler } from '@/src/hooks/use-back-handler';
 import { HomeDeliveryScreenProps } from '@/src/navigation/types';
 import {
@@ -35,11 +34,9 @@ const HomeDeliveryScreen = ({
   const [logoutLoading, setLogoutLoading] = useState(true);
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [historyModal, setHistoryModal] = useState(false);
-  const [lang, setLang] = useState(0);
+  const [lang] = useAtom(languageAtom);
   const [selectedHistory, setSelectedHistory] =
     useState<DeliveryHistory | null>(null);
-
-  const [auth] = useAtom(authAtom);
 
   const [{ data, isLoading, refetch, isError }] = useAtom(
     deliveryHistoryAtom
@@ -79,7 +76,7 @@ const HomeDeliveryScreen = ({
     >
       <View style={{ width: wp('30%') }}>
         <Text style={{ color: Colors.black }} numberOfLines={1}>
-          {item.row_code}
+          {item.branch_name}
         </Text>
       </View>
       <View
@@ -123,7 +120,7 @@ const HomeDeliveryScreen = ({
       }}
     >
       <Text style={{ color: Colors.black }}>
-        {fetchLanguage[lang].notaskhistory}
+        {lang.notaskhistory}
       </Text>
 
       <View
@@ -150,7 +147,7 @@ const HomeDeliveryScreen = ({
               color: Colors.black,
             }}
           >
-            {fetchLanguage[lang].reload}
+            {lang.reload}
           </Text>
         </TouchableOpacity>
       </View>
@@ -164,11 +161,8 @@ const HomeDeliveryScreen = ({
   }, []);
 
   useEffect(() => {
-    setLang(auth?.user?.language === 'ENG' ? 0 : 1);
-  }, [auth]);
-
-  useEffect(() => {
-    if (isError) {
+    //@ts-ignore
+    if (data?.error === 'Not Authorized') {
       setLogoutVisible(true);
       setTimeout(() => {
         setLogoutLoading(false);
@@ -190,17 +184,10 @@ const HomeDeliveryScreen = ({
         <>
           <View style={styles.row}>
             <Text style={[styles.bold, { width: wp('25%') }]}>
-              {/* {fetchLanguage[lang].bill_no} */}
-              Row Code No.
+              {lang.store_name}
             </Text>
-            <Text style={styles.bold}>
-              {/* {fetchLanguage[lang].date} */}
-              Driver
-            </Text>
-            <Text style={styles.bold}>
-              {/* {fetchLanguage[lang].immageattached} */}
-              Status ID
-            </Text>
+            <Text style={styles.bold}>{lang.driver}</Text>
+            <Text style={styles.bold}>{lang.status_id}</Text>
           </View>
           <FlatList
             refreshing={isLoading}
@@ -220,7 +207,7 @@ const HomeDeliveryScreen = ({
             <View style={styles.modalTitleContainer}>
               <View style={styles.rowCodeContainer}>
                 <Text style={styles.rowCodeText}>
-                  {`Row Code No. ${selectedHistory?.row_code}`}
+                  {`${lang.row_code_no} ${selectedHistory?.row_code}`}
                 </Text>
               </View>
             </View>
@@ -230,12 +217,12 @@ const HomeDeliveryScreen = ({
             <>
               <View style={styles.modelContent}>
                 <Row
-                  left="Date : "
+                  left={`${lang.date} :`}
                   right={selectedHistory?.time_in}
                 />
 
                 <Row
-                  left="Branch Name: "
+                  left={`${lang.store_name} :`}
                   right={selectedHistory?.branch_name}
                 />
               </View>

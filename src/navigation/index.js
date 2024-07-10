@@ -4,16 +4,13 @@ import {
   DrawerItemList,
   createDrawerNavigator,
 } from '@react-navigation/drawer';
-import {
-  NavigationContainer,
-  useFocusEffect,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
 import { useAtom } from 'jotai';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StatusBar,
   StyleSheet,
@@ -22,10 +19,9 @@ import {
   View,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { authAtom } from '../atom';
+import { authAtom, languageAtom } from '../atom';
 import CustomModal from '../components/CustomModal';
 import FourOrFour from '../screens/404';
-import Capture from '../screens/Capture';
 import ChangePassword from '../screens/ChangePassword';
 import DeliveryScreen from '../screens/Deliveries';
 import HomeDeliveryScreen from '../screens/HomeDelivery';
@@ -35,13 +31,12 @@ import Settings from '../screens/Settings';
 import Update from '../screens/Update';
 import * as Services from '../services';
 import { Colors } from '../themes/colors';
-import fetchLanguage from '../utils/language';
 import * as Utils from '../utils/permission';
 
 function CustomDrawerContent(props) {
   const { navigation, ...rest } = props;
   const [auth, setAuth] = useAtom(authAtom);
-  const [lang, setLang] = useState(0);
+  const [lang] = useAtom(languageAtom);
   const [logoutLoading, setLogoutLoading] = useState(true);
   const [logoutVisible, setLogoutVisible] = useState(false);
   const translateX = 0;
@@ -65,14 +60,6 @@ function CustomDrawerContent(props) {
       }, 500);
     }, 1500);
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      if (auth) {
-        setLang(auth?.user?.language === 'ENG' ? 0 : 1);
-      }
-    }, [navigation, auth])
-  );
 
   return (
     <DrawerContentScrollView {...props}>
@@ -131,13 +118,13 @@ function CustomDrawerContent(props) {
             <DrawerItemList {...rest} {...props} />
 
             <DrawerItem
-              label={fetchLanguage[lang].settings}
+              label={lang.settings}
               onPress={() => navigation.navigate('Settings')}
             />
 
             <View style={styles.dividerContainer} />
             <DrawerItem
-              label={fetchLanguage[lang].logout}
+              label={lang.logout}
               onPress={() => onPressLogout()}
             />
           </View>
@@ -147,16 +134,8 @@ function CustomDrawerContent(props) {
   );
 }
 function DrawerNavigator() {
-  const [lang, setLang] = useState(0);
-  const [auth] = useAtom(authAtom);
+  const [lang] = useAtom(languageAtom);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (auth) {
-        setLang(auth?.user?.language === 'ENG' ? 0 : 1);
-      }
-    }, [auth])
-  );
   return (
     <Drawer.Navigator
       drawerType="front"
@@ -171,7 +150,7 @@ function DrawerNavigator() {
       drawerContent={(props) => <CustomDrawerContent {...props} />}
     >
       <Drawer.Screen
-        name={fetchLanguage[lang].home_delivery}
+        name={lang.home}
         component={HomeDeliveryScreen}
         options={{
           header: () => null,
@@ -179,7 +158,7 @@ function DrawerNavigator() {
       />
 
       <Drawer.Screen
-        name={fetchLanguage[lang].deliveries}
+        name={lang.deliveries}
         component={DeliveryScreen}
         options={{
           header: () => null,
@@ -312,12 +291,6 @@ export default function App() {
           name="ChangePassword"
           component={ChangePassword}
           options={{ gestureEnabled: false }}
-        />
-
-        <Stack.Screen
-          name="Capture"
-          component={Capture}
-          mode="modal"
         />
 
         <Stack.Screen
