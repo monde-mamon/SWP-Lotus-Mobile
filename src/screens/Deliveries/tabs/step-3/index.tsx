@@ -183,25 +183,6 @@ const DeliveryStep3 = ({
               confirmText=""
               imageType="image/jpeg"
               trimWhitespace
-              style={{
-                backgroundColor: 'transparent',
-              }}
-              webviewContainerStyle={{
-                backgroundColor: 'transparent',
-              }}
-              webStyle={`
-                  .m-signature-pad {
-                    background-color: transparent;
-                  }
-                  .m-signature-pad {
-                    flex: 1;
-                    box-shadow: none;
-                    border-radius: 10px;
-                  }
-                  .m-signature-pad--footer {
-                    display: none;
-                  }
-                  `}
               backgroundColor="rgb(255,255,255)"
             />
             <Button title={lang.clear} onPress={handleOnPressClear} />
