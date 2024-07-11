@@ -1,6 +1,8 @@
 {
   "cli": {
-    "version": ">= 7.6.1"
+    "version": ">= 7.6.1",
+    "promptToConfigurePushNotifications": false,
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -13,7 +15,8 @@
       "channel": "preview",
       "env": {
         "API_URL": "http://mglsgp1.railsfor.biz:3111/api/v1"
-      }
+      },
+      "autoIncrement": true
     },
     "production": {}
   },
