@@ -120,7 +120,7 @@ export const language = {
     changelanguage: 'เปลี่ยนภาษา',
     isPDAMODE: 'โหมดพีดีเอ',
     chooselanguage: 'เลือกภาษา',
-    home: 'บาน',
+    home: 'หน้าแรก',
     receiving: 'การได้มาซึ่ง',
     completeDelivery: 'เสร็จสิ้นการจัดส่ง',
     return: 'กลับ',

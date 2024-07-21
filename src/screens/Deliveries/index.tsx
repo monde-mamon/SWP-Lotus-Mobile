@@ -1,3 +1,4 @@
+import { useIsFocused } from '@react-navigation/native';
 import { Tab, TabView } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { delay } from 'lodash';
@@ -18,11 +19,16 @@ const DeliveryScreen = ({
 }: DeliveryScreenProps): JSX.Element => {
   const [index, setIndex] = useState(0);
   const [lang] = useAtom(languageAtom);
+  const isFocused = useIsFocused();
   const [isRefreshing, setRefreshing] = useState<boolean>(false);
   useBackHandler();
   useEffect(() => {
     delay(() => setIndex(0), 3000);
   }, []);
+
+  useEffect(() => {
+    if (isFocused) resetState();
+  }, [isFocused]);
 
   const resetState = (): void => {
     setRefreshing(true);
