@@ -106,6 +106,7 @@ const DeliveryStep3 = ({
   };
 
   const onTouchOutSideToLogout = (): void => {
+    ref.current?.clearSignature();
     setSuccessVisible(false);
     setSuccessLoading(true);
     onSubmit();
