@@ -90,6 +90,7 @@ export const language = {
     done: 'Done',
     clear: 'Clear',
     store_name: 'Store Name',
+    next: 'Next',
   },
   THAI: {
     date: 'วันที่',
@@ -182,5 +183,6 @@ export const language = {
     done: 'เสร็จแล้ว',
     clear: 'ชัดเจน',
     store_name: 'ชื่อร้าน',
+    next: 'ต่อไป',
   },
 };

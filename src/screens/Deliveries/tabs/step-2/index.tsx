@@ -14,6 +14,7 @@ import {
   TYPE,
   initialState,
 } from './form';
+import { languageAtom } from '@/src/atom';
 import { Container } from '@/src/components/container';
 import { CounterButton } from '@/src/components/counter-button';
 import { PrimaryButton } from '@/src/components/primary-button';
@@ -22,7 +23,6 @@ import {
   createStep2Atom,
   deliveryItemAtom,
 } from '@/src/queries';
-import { languageAtom } from '@/src/atom';
 
 const DeliveryStep2 = ({
   onSubmit,
@@ -160,7 +160,7 @@ const DeliveryStep2 = ({
 
       <PrimaryButton
         onSubmit={handleOnPressSubmit}
-        title={lang.submit}
+        title={lang.next}
       />
     </Container>
   );
