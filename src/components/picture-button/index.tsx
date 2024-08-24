@@ -49,7 +49,7 @@ export const PictureButton: FC<PictureButtonProps> = ({
         <View style={styles.contentContainer}>
           <Ionicon
             name={'image-outline'}
-            size={30}
+            size={50}
             color={Colors.primary}
           />
         </View>
@@ -81,6 +81,7 @@ export const PictureButton: FC<PictureButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     paddingVertical: hp('1%'),
     justifyContent: 'space-between',
   },
@@ -89,19 +90,21 @@ const styles = StyleSheet.create({
     marginTop: hp('1%'),
     borderRadius: 5,
     borderWidth: 0.5,
+    marginRight: 20,
     flex: 1,
   },
   contentContainer: {
-    flex: 1,
+    width: '100%',
     alignItems: 'center',
-    padding: wp(5),
+    padding: wp(15),
   },
   textContainer: {
     color: 'gray',
   },
   imageContainer: {
-    height: hp('30%'),
+    height: hp('25%'),
     width: '100%',
+    padding: wp(25),
     resizeMode: 'cover',
     borderRadius: 5,
     zIndex: 50,

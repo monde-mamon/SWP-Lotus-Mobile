@@ -150,24 +150,26 @@ const DeliveryStep3 = ({
         scrollEnabled={scrollEnabled}
       >
         <>
-          <PictureButton
-            title={lang.picture_1}
-            item={state.picture_1 as Image}
-            onPress={(): Promise<void> => openCamera('picture_1')}
-            onClear={(): void =>
-              setState({ ...state, picture_1: null })
-            }
-            error={''}
-          />
-          <PictureButton
-            title={lang.picture_2}
-            item={state.picture_2 as Image}
-            onPress={(): Promise<void> => openCamera('picture_2')}
-            onClear={(): void =>
-              setState({ ...state, picture_2: null })
-            }
-            error={''}
-          />
+          <ScrollView horizontal>
+            <PictureButton
+              title={lang.picture_1}
+              item={state.picture_1 as Image}
+              onPress={(): Promise<void> => openCamera('picture_1')}
+              onClear={(): void =>
+                setState({ ...state, picture_1: null })
+              }
+              error={''}
+            />
+            <PictureButton
+              title={lang.picture_2}
+              item={state.picture_2 as Image}
+              onPress={(): Promise<void> => openCamera('picture_2')}
+              onClear={(): void =>
+                setState({ ...state, picture_2: null })
+              }
+              error={''}
+            />
+          </ScrollView>
           <View style={{ height: 300, gap: 10, paddingVertical: 10 }}>
             <Text>{lang.signature}</Text>
 
