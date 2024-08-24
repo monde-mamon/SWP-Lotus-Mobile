@@ -33,12 +33,16 @@ export type Step1FormSchema = z.infer<typeof Step1FormSchema>;
 export const getInitialValues = (
   driverName?: string,
   hubId?: string,
-  entryDateTime?: string
+  entryDateTime?: string,
+  deliveryCondition?: string,
+  deliveryStatus?: string
 ): Step1FormSchema =>
   Step1FormSchema.parse({
     senders_name: driverName,
     hub_id: hubId,
     entry_date_and_time: entryDateTime,
+    delivery_condition: deliveryCondition,
+    delivery_status: deliveryStatus,
   });
 
 export const initialState = {

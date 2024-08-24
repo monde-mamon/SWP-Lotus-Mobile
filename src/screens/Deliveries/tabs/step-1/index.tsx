@@ -1,3 +1,4 @@
+import * as Location from 'expo-location';
 import { Formik } from 'formik';
 import type { FormikProps } from 'formik';
 import { useAtom, useSetAtom } from 'jotai';
@@ -39,6 +40,7 @@ import {
 import { storeData } from '@/src/services';
 import { Colors } from '@/src/themes/colors';
 import { language } from '@/src/utils/language';
+
 const DeliveryStep1 = ({
   onSubmit,
   isReset,
@@ -56,6 +58,11 @@ const DeliveryStep1 = ({
   const [auth] = useAtom(authAtom);
   const [lang] = useAtom(languageAtom);
   const setNewDelivery = useSetAtom(newDeliveryAtom);
+
+  const [initialDeliveryCondition, setInitialDeliveryCondition] =
+    useState('');
+  const [initialDeliveryStatus, setInitialDeliveryStatus] =
+    useState('');
 
   const [
     {
@@ -117,6 +124,7 @@ const DeliveryStep1 = ({
   const handleFormSubmit = async (
     values: Step1Form
   ): Promise<void> => {
+    const response = await Location.getCurrentPositionAsync({});
     const delivery = {
       hub_code:
         auth?.user?.hub_code ?? Number(state.hub_details.hub_id),
@@ -133,6 +141,8 @@ const DeliveryStep1 = ({
       user_id: Number(auth?.user.id ?? 0),
       driver_name:
         auth?.user.driver_name ?? state.driver_details.driver_name,
+      user_latitude: response.coords.latitude ?? 'N/A',
+      user_longitude: response.coords.longitude ?? 'N/A',
     };
 
     createDeliveryMutate(delivery);
@@ -158,15 +168,49 @@ const DeliveryStep1 = ({
   useEffect(() => {
     if (isReset) {
       setState(initialState);
+
       formikRef?.current?.setValues(
-        getInitialValues(auth?.user.driver_name, auth?.user?.hub_code)
+        getInitialValues(
+          auth?.user.driver_name,
+          auth?.user?.hub_code,
+          '',
+          initialDeliveryCondition,
+          initialDeliveryStatus
+        )
       );
       formikRef?.current?.setErrors(getInitialValues());
       scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
-  }, [isReset]);
+  }, [isReset, initialDeliveryCondition, initialDeliveryStatus]);
 
   const isEnglish = lang.tryagain === language.ENG.tryagain;
+
+  useEffect(() => {
+    if (deliveryConditionData) {
+      setInitialDeliveryCondition(
+        isEnglish
+          ? (
+              deliveryConditionData as unknown as DeliveryCondition[]
+            )[0].condition_description
+          : (
+              deliveryConditionData as unknown as DeliveryCondition[]
+            )[0].condition_description_thai
+      );
+    }
+  }, [deliveryConditionData]);
+
+  useEffect(() => {
+    if (deliveryStatusData) {
+      setInitialDeliveryStatus(
+        isEnglish
+          ? (deliveryStatusData as unknown as DeliveryStatus[])[0]
+              .status_eng
+          : (deliveryStatusData as unknown as DeliveryStatus[])[0]
+              .status_thai
+      );
+    }
+  }, [deliveryStatusData]);
+
   return (
     <Container style={{ flex: 1, paddingHorizontal: 15 }}>
       <BottomModal
@@ -316,7 +360,10 @@ const DeliveryStep1 = ({
         innerRef={formikRef}
         initialValues={getInitialValues(
           auth?.user.driver_name,
-          auth?.user?.hub_code
+          auth?.user?.hub_code,
+          '',
+          initialDeliveryCondition,
+          initialDeliveryStatus
         )}
         onSubmit={handleFormSubmit}
         enableReinitialize
@@ -454,7 +501,7 @@ const DeliveryStep1 = ({
             </ScrollView>
             <PrimaryButton
               onSubmit={handleSubmit}
-              title={lang.submit}
+              title={lang.next}
             />
           </>
         )}
