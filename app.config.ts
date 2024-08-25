@@ -8,7 +8,7 @@ export default {
     name: 'SWP-Lotus-Tracker',
     slug: 'SWP-Lotus-Tracker',
     owner: 'railsforbiz',
-    version: '0.0.4',
+    version: '0.0.5',
     orientation: 'portrait',
     icon: './src/assets/images/swp_logo.png',
     scheme: 'myapp',
