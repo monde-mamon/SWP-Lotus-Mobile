@@ -2,6 +2,7 @@ import * as Location from 'expo-location';
 import { Formik } from 'formik';
 import type { FormikProps } from 'formik';
 import { useAtom, useSetAtom } from 'jotai';
+import { isEmpty } from 'lodash';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -58,10 +59,11 @@ const DeliveryStep1 = ({
   const setNewDelivery = useSetAtom(newDeliveryAtom);
 
   const [initialDeliveryCondition, setInitialDeliveryCondition] =
-    useState('');
+    useState<DeliveryCondition | null>(null);
   const [initialDeliveryStatus, setInitialDeliveryStatus] =
-    useState('');
+    useState<DeliveryStatus | null>(null);
 
+  const [isEnglish, setEnglish] = useState<boolean>(true);
   const [
     {
       data: hubData,
@@ -163,47 +165,60 @@ const DeliveryStep1 = ({
   }, [createDeliveryData, createDeliveryIsError]);
 
   useEffect(() => {
+    setEnglish(lang.tryagain === language.ENG.tryagain);
+  }, [lang]);
+
+  useEffect(() => {
     if (isReset) {
       setState(initialState);
-
       formikRef?.current?.setValues(
         getInitialValues(
           auth?.user.driver_name,
           auth?.user?.hub_code,
-          initialDeliveryCondition,
-          initialDeliveryStatus
+          isEnglish
+            ? initialDeliveryCondition?.condition_description
+            : initialDeliveryCondition?.condition_description_thai,
+          isEnglish
+            ? initialDeliveryStatus?.status_eng
+            : initialDeliveryStatus?.status_thai
         )
       );
+      setState({
+        ...state,
+        delivery_condition_details:
+          initialDeliveryCondition as DeliveryCondition,
+      });
+
+      setState({
+        ...state,
+        delivery_status_details:
+          initialDeliveryStatus as DeliveryStatus,
+      });
       formikRef?.current?.setErrors(getInitialValues());
       scrollRef.current?.scrollTo({ x: 0, y: 0, animated: true });
     }
   }, [isReset, initialDeliveryCondition, initialDeliveryStatus]);
 
-  const isEnglish = lang.tryagain === language.ENG.tryagain;
-
   useEffect(() => {
-    if (deliveryConditionData) {
-      setInitialDeliveryCondition(
-        isEnglish
-          ? (
-              deliveryConditionData as unknown as DeliveryCondition[]
-            )[0].condition_description
-          : (
-              deliveryConditionData as unknown as DeliveryCondition[]
-            )[0].condition_description_thai
-      );
+    if (!isEmpty(deliveryConditionData) && deliveryConditionData) {
+      setInitialDeliveryCondition(deliveryConditionData[0]);
+
+      setState({
+        ...state,
+        delivery_condition_details:
+          deliveryConditionData[0] as DeliveryCondition,
+      });
     }
   }, [deliveryConditionData]);
 
   useEffect(() => {
-    if (deliveryStatusData) {
-      setInitialDeliveryStatus(
-        isEnglish
-          ? (deliveryStatusData as unknown as DeliveryStatus[])[0]
-              .status_eng
-          : (deliveryStatusData as unknown as DeliveryStatus[])[0]
-              .status_thai
-      );
+    if (!isEmpty(deliveryStatusData) && deliveryStatusData) {
+      setInitialDeliveryStatus(deliveryStatusData[0]);
+      setState({
+        ...state,
+        delivery_status_details:
+          deliveryStatusData[0] as DeliveryStatus,
+      });
     }
   }, [deliveryStatusData]);
 
@@ -357,8 +372,12 @@ const DeliveryStep1 = ({
         initialValues={getInitialValues(
           auth?.user.driver_name,
           auth?.user?.hub_code,
-          initialDeliveryCondition,
-          initialDeliveryStatus
+          isEnglish
+            ? initialDeliveryCondition?.condition_description
+            : initialDeliveryCondition?.condition_description_thai,
+          isEnglish
+            ? initialDeliveryStatus?.status_eng
+            : initialDeliveryStatus?.status_thai
         )}
         onSubmit={handleFormSubmit}
         enableReinitialize
