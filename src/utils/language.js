@@ -77,7 +77,7 @@ export const language = {
     number_of_trays_sent: 'Number of Trays Sent',
     number_of_green_basket: 'Number of Green Basket',
     number_of_trays_store_received: 'Number of Trays Store Received',
-    number_of_trays_hub_returned: 'Number of Trays Store Received',
+    number_of_trays_hub_returned: 'Number of Trays Return To Hub',
     notes: 'Notes',
     picture_1: 'Picture 1',
     picture_2: 'Picture 2',
