@@ -94,7 +94,6 @@ export interface Step1Delivery {
   row_code: string;
   hub_code: string;
   branch_name: string;
-  time_in: string;
   time_out: string;
   delivery_status_code: string;
   truck_code_license: string;
