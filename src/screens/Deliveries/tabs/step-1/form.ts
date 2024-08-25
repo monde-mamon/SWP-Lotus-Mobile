@@ -8,9 +8,7 @@ export const Step1Form = z.object({
   name_of_sending_branch: z.string({
     required_error: 'Please select one item.',
   }),
-  entry_date_and_time: z.string({
-    required_error: 'Please select date.',
-  }),
+  entry_date_and_time: z.string().optional(),
   delivery_condition: z.string({
     required_error: 'Please select one item.',
   }),
@@ -33,14 +31,12 @@ export type Step1FormSchema = z.infer<typeof Step1FormSchema>;
 export const getInitialValues = (
   driverName?: string,
   hubId?: string,
-  entryDateTime?: string,
   deliveryCondition?: string,
   deliveryStatus?: string
 ): Step1FormSchema =>
   Step1FormSchema.parse({
     senders_name: driverName,
     hub_id: hubId,
-    entry_date_and_time: entryDateTime,
     delivery_condition: deliveryCondition,
     delivery_status: deliveryStatus,
   });

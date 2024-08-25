@@ -2,7 +2,6 @@ import * as Location from 'expo-location';
 import { Formik } from 'formik';
 import type { FormikProps } from 'formik';
 import { useAtom, useSetAtom } from 'jotai';
-import moment from 'moment';
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -17,7 +16,6 @@ import {
 } from './form';
 import { authAtom, languageAtom, newDeliveryAtom } from '@/src/atom';
 import { Container } from '@/src/components/container';
-import { DateTimePicker } from '@/src/components/date-time-picker';
 import { DropDownPicker } from '@/src/components/drop-down-picker';
 import { BottomModal } from '@/src/components/modal';
 import { PrimaryButton } from '@/src/components/primary-button';
@@ -129,7 +127,6 @@ const DeliveryStep1 = ({
       hub_code:
         auth?.user?.hub_code ?? Number(state.hub_details.hub_id),
       branch_name: state.store_details.store_name,
-      time_in: values.entry_date_and_time,
       time_out: values.entry_date_and_time,
       delivery_status_code:
         state.delivery_status_details.delivery_status_code,
@@ -173,7 +170,6 @@ const DeliveryStep1 = ({
         getInitialValues(
           auth?.user.driver_name,
           auth?.user?.hub_code,
-          '',
           initialDeliveryCondition,
           initialDeliveryStatus
         )
@@ -361,7 +357,6 @@ const DeliveryStep1 = ({
         initialValues={getInitialValues(
           auth?.user.driver_name,
           auth?.user?.hub_code,
-          '',
           initialDeliveryCondition,
           initialDeliveryStatus
         )}
@@ -371,13 +366,7 @@ const DeliveryStep1 = ({
         validateOnBlur={false}
         validationSchema={toFormikValidationSchema(Step1Form)}
       >
-        {({
-          setFieldValue,
-          setFieldError,
-          values,
-          handleSubmit,
-          errors,
-        }): ReactNode => (
+        {({ values, handleSubmit, errors }): ReactNode => (
           <>
             <ScrollView
               showsVerticalScrollIndicator={false}
@@ -447,23 +436,6 @@ const DeliveryStep1 = ({
                       color={Colors.primary}
                     />
                   }
-                />
-                <DateTimePicker
-                  title={lang.time_in}
-                  placeholder="Choose Date"
-                  value={values.entry_date_and_time}
-                  minDate={moment().subtract(1, 'days').toDate()}
-                  maxDate={new Date()}
-                  onSelect={(val: string): void => {
-                    setState({
-                      ...state,
-                      issue_date: val,
-                      entry_date_time: val,
-                    });
-                    setFieldError('entry_date_and_time', '');
-                    setFieldValue('entry_date_and_time', val);
-                  }}
-                  error={errors.entry_date_and_time}
                 />
 
                 <DropDownPicker
