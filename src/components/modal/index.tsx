@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   contentContainer: {
+    maxHeight: '90%',
     alignContent: 'center',
   },
   loadingContainer: {
