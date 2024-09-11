@@ -1,18 +1,27 @@
 import { FC } from 'react';
-import { StyleSheet, Text, Pressable, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  ActivityIndicator,
+} from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Colors } from '@/src/themes/colors';
 
 interface PrimaryButtonProps {
   onSubmit?: () => void;
   title: string;
+  isLoading?: boolean;
 }
 export const PrimaryButton: FC<PrimaryButtonProps> = ({
   onSubmit,
   title,
+  isLoading,
 }) => (
   <View style={styles.container}>
     <Pressable
+      disabled={isLoading}
       style={({ pressed }) => [
         {
           padding: pressed ? wp('3%') : wp('3.5%'),
@@ -22,7 +31,11 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({
       ]}
       onPress={onSubmit}
     >
-      <Text style={styles.submit}>{title}</Text>
+      {isLoading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text style={styles.submit}>{title}</Text>
+      )}
     </Pressable>
   </View>
 );

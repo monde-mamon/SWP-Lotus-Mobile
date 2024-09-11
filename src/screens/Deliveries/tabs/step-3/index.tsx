@@ -29,6 +29,7 @@ const DeliveryStep3 = ({
   const [newDelivery] = useAtom(newDeliveryAtom);
   const [{ data, isError, mutate }] = useAtom(uploadPhotoAtom);
   const [successVisible, setSuccessVisible] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [successLoading, setSuccessLoading] = useState(true);
   const [scrollEnabled, setScrollEnabled] = useState(true);
   const ref = useRef<SignatureViewRef>(null);
@@ -92,6 +93,8 @@ const DeliveryStep3 = ({
       Alert.alert('Please add your signature');
       return;
     }
+    setButtonLoading(true);
+    setSuccessVisible(true);
     await Promise.all([
       uploadPhoto(state.picture_1),
       uploadPhoto(state.picture_2),
@@ -126,13 +129,13 @@ const DeliveryStep3 = ({
       updateDeliveryData &&
       !updateDeliveryIsError
     ) {
-      setSuccessVisible(true);
       delay(() => setSuccessLoading(false), 1500);
     }
   }, [data, isError, updateDeliveryData, updateDeliveryIsError]);
 
   useEffect(() => {
     if (isReset) {
+      setSuccessLoading(true);
       setState(initialState);
     }
   }, [isReset]);
@@ -195,6 +198,7 @@ const DeliveryStep3 = ({
       <View style={{ height: hp('10%') }} />
 
       <PrimaryButton
+        isLoading={buttonLoading}
         onSubmit={handleOnPressSubmit}
         title={lang.done}
       />

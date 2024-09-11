@@ -47,6 +47,7 @@ const DeliveryStep1 = ({
   const [hubStateVisible, setHubStateVisible] = useState(false);
   const [driverStateVisible, setDriverStateVisible] = useState(false);
   const [storeStateVisible, setStoreStateVisible] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [deliveryStateVisible, setDeliveryStateVisible] =
     useState(false);
   const [deliveryConditionVisible, setDeliveryConditionVisible] =
@@ -124,6 +125,7 @@ const DeliveryStep1 = ({
   const handleFormSubmit = async (
     values: Step1Form
   ): Promise<void> => {
+    setButtonLoading(true);
     const response = await Location.getCurrentPositionAsync({});
     const delivery = {
       hub_code:
@@ -183,6 +185,7 @@ const DeliveryStep1 = ({
             : initialDeliveryStatus?.status_thai
         )
       );
+      setButtonLoading(false);
       setState({
         ...state,
         delivery_condition_details:
@@ -491,6 +494,7 @@ const DeliveryStep1 = ({
               </>
             </ScrollView>
             <PrimaryButton
+              isLoading={buttonLoading}
               onSubmit={handleSubmit}
               title={lang.next}
             />

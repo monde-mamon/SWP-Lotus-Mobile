@@ -31,6 +31,7 @@ const DeliveryStep2 = ({
 }: DeliveryStep2Props): JSX.Element => {
   const [state, setState] = useState(initialState);
   const [lang] = useAtom(languageAtom);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [{ data: deliveryItemData, refetch }] =
     useAtom(deliveryItemAtom);
   const handleOnChange = (
@@ -61,6 +62,7 @@ const DeliveryStep2 = ({
   ] = useAtom(createStep2Atom);
 
   const handleOnPressSubmit = (): void => {
+    setButtonLoading(true);
     const updateParamData = {
       ...deliveryItemData,
       green_basket: state.number_of_green_basket,
@@ -83,6 +85,7 @@ const DeliveryStep2 = ({
   useEffect(() => {
     if (isReset) {
       setState(initialState);
+      setButtonLoading(false);
     }
   }, [isReset]);
 
@@ -159,6 +162,7 @@ const DeliveryStep2 = ({
       </ScrollView>
 
       <PrimaryButton
+        isLoading={buttonLoading}
         onSubmit={handleOnPressSubmit}
         title={lang.next}
       />
