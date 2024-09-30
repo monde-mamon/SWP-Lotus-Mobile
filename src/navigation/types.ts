@@ -7,6 +7,7 @@ export type StackRoutes = {
   Delivery: undefined;
   FourOrFour: undefined;
   Maintainance: undefined;
+  CheckIn: undefined;
 };
 
 export type HomeDeliveryScreenProps = NativeStackScreenProps<

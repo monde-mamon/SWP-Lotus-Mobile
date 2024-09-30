@@ -23,6 +23,7 @@ import { authAtom, languageAtom } from '../atom';
 import CustomModal from '../components/CustomModal';
 import FourOrFour from '../screens/404';
 import ChangePassword from '../screens/ChangePassword';
+import CheckInScreen from '../screens/CheckIn';
 import DeliveryScreen from '../screens/Deliveries';
 import HomeDeliveryScreen from '../screens/HomeDelivery';
 import Login from '../screens/Login';
@@ -160,6 +161,13 @@ function DrawerNavigator() {
       <Drawer.Screen
         name={lang.deliveries}
         component={DeliveryScreen}
+        options={{
+          header: () => null,
+        }}
+      />
+      <Drawer.Screen
+        name={'CheckIn'}
+        component={CheckInScreen}
         options={{
           header: () => null,
         }}
