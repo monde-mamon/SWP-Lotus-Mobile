@@ -1,14 +1,16 @@
-import { useIsFocused } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+} from '@react-navigation/native';
 import { Text } from '@rneui/base';
-import * as Location from 'expo-location';
 import { useAtom } from 'jotai';
 import { first, isEmpty } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Header } from '../../components/Header';
 import { Colors } from '../../themes/colors';
-import { authAtom } from '@/src/atom';
+import { authAtom, languageAtom } from '@/src/atom';
 import CustomModal from '@/src/components/CustomModal';
 import SwipeableButton from '@/src/components/swipeable-button';
 import { useBackHandler } from '@/src/hooks/use-back-handler';
@@ -24,7 +26,7 @@ const CheckInScreen = ({
 }: DeliveryScreenProps): JSX.Element => {
   const isFocused = useIsFocused();
   const [auth] = useAtom(authAtom);
-
+  const [lang] = useAtom(languageAtom);
   const [logoutLoading, setLogoutLoading] = useState(true);
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [isStatusNone, setIsStatusNone] = useState(false);
@@ -42,11 +44,11 @@ const CheckInScreen = ({
     },
   ] = useAtom(fetchCheckInStatusAtom);
 
-  useEffect(() => {
-    if (isFocused) {
+  useFocusEffect(
+    useCallback(() => {
       fetchCheckInStatusRefetch();
-    }
-  }, [isFocused]);
+    }, [])
+  );
 
   useEffect(() => {
     if (
@@ -80,13 +82,12 @@ const CheckInScreen = ({
   }, [fetchCheckInStatusData, fetchCheckInStatusIsRefetching]);
 
   const checkIn = async (): Promise<void> => {
-    const response = await Location.getCurrentPositionAsync({});
-
     mutateCheckIn({
       user_id: Number(auth?.user?.id),
-      speed: response.coords.speed ?? 0,
-      latitude: response.coords.latitude ?? 'N/A',
-      longitude: response.coords.longitude ?? 'N/A',
+      speed: 0,
+      latitude: 0,
+      longitude: 0,
+
       status: 'CHECKIN',
     });
     setIsStatusNone(false);
@@ -116,7 +117,11 @@ const CheckInScreen = ({
         text={'Successfully Checked In!'}
       />
       <View style={{ padding: wp('4%'), flex: 1 }}>
-        <Header title={'Check In'} navigation={navigation} />
+        <Header
+          title={lang.checkin}
+          navigation={navigation}
+          isCustom
+        />
 
         <View
           style={{
@@ -131,7 +136,7 @@ const CheckInScreen = ({
               fontWeight: 'bold',
             }}
           >
-            Status:
+            {lang.status}:
           </Text>
           {isStatusNone ? (
             <Text
@@ -141,7 +146,7 @@ const CheckInScreen = ({
                 color: 'red',
               }}
             >
-              None
+              {lang.none}
             </Text>
           ) : (
             <Text
@@ -151,7 +156,7 @@ const CheckInScreen = ({
                 color: 'green',
               }}
             >
-              Checked In
+              {lang.checkedin}
             </Text>
           )}
         </View>
