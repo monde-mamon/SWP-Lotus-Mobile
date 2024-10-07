@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { useAtom } from 'jotai';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
@@ -156,10 +157,11 @@ const HomeDeliveryScreen = ({
 
   useBackHandler();
 
-  useEffect(() => {
-    onRefresh();
-  }, []);
-
+  useFocusEffect(
+    useCallback(() => {
+      onRefresh();
+    }, [])
+  );
   useEffect(() => {
     //@ts-ignore
     if (data?.error === 'Not Authorized') {

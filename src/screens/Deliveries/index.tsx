@@ -1,8 +1,11 @@
-import { useIsFocused } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+} from '@react-navigation/native';
 import { Tab, TabView } from '@rneui/themed';
 import { useAtom } from 'jotai';
 import { delay, first } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Header } from '../../components/Header';
@@ -35,11 +38,11 @@ const DeliveryScreen = ({
     },
   ] = useAtom(fetchCheckInStatusAtom);
 
-  useEffect(() => {
-    if (isFocused) {
+  useFocusEffect(
+    useCallback(() => {
       fetchCheckInStatusRefetch();
-    }
-  }, [isFocused]);
+    }, [])
+  );
 
   useEffect(() => {
     if (
