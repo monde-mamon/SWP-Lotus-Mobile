@@ -91,6 +91,10 @@ export const language = {
     clear: 'Clear',
     store_name: 'Store Name',
     next: 'Next',
+    checkin: 'Check In',
+    status: 'Status',
+    checkedin: 'Checked In',
+    none: 'None',
   },
   THAI: {
     date: 'วันที่',
@@ -184,5 +188,9 @@ export const language = {
     clear: 'ลายเซ็นใหม่',
     store_name: 'ชื่อร้าน',
     next: 'หน้าต่อไป',
+    checkin: 'เช็คอิน',
+    status: 'เช็คอิน',
+    checkedin: 'เช็คอินแล้ว',
+    none: 'เช็คอิน',
   },
 };

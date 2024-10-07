@@ -166,7 +166,7 @@ function DrawerNavigator() {
         }}
       />
       <Drawer.Screen
-        name={'CheckIn'}
+        name={lang.checkin}
         component={CheckInScreen}
         options={{
           header: () => null,

@@ -210,4 +210,8 @@ export interface Language {
   clear: string;
   store_name: string;
   next: string;
+  checkin: string;
+  status: string;
+  checkedin: string;
+  none: string;
 }
