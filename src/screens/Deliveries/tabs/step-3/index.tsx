@@ -112,6 +112,7 @@ const DeliveryStep3 = ({
     ref.current?.clearSignature();
     setSuccessVisible(false);
     setSuccessLoading(true);
+    setButtonLoading(false);
     onSubmit();
   };
 
