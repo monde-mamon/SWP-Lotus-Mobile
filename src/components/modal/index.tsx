@@ -65,64 +65,64 @@ export const BottomModal: FC<BottomModalProps> = ({
     }
   >
     <ModalContent>
-      <>
-        <View style={styles.contentContainer}>
-          {loading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" />
+      <View style={styles.contentContainer}>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" />
+          </View>
+        ) : error ? (
+          <>
+            <View style={styles.errorContainer}>
+              <Pressable
+                style={styles.tryAgainContainer}
+                onPress={(): void => refetch()}
+              >
+                <Text style={styles.tryAgainText}>Try Again</Text>
+              </Pressable>
             </View>
-          ) : error ? (
-            <>
-              <View style={styles.errorContainer}>
+          </>
+        ) : (
+          <ScrollView
+            style={{
+              paddingBottom: 50,
+            }}
+          >
+            {!isEmpty(content) &&
+              content &&
+              content?.map((data, idx) => (
                 <Pressable
-                  style={styles.tryAgainContainer}
-                  onPress={(): void => refetch()}
+                  key={idx}
+                  onPress={(): void => {
+                    onSelect(data);
+                    onTouchOutside();
+                  }}
+                  style={({ pressed }): StyleProp<ViewStyle> => [
+                    styles.buttonContainer,
+                    {
+                      backgroundColor: pressed ? '#D9D9D9' : 'white',
+                    },
+                  ]}
                 >
-                  <Text style={styles.tryAgainText}>Try Again</Text>
+                  <Text>
+                    {isEnglish
+                      ? (data as Hub)?.hub_description ??
+                        (data as Driver)?.driver_name ??
+                        (data as Store)?.store_name ??
+                        (data as DeliveryStatus)?.status_eng ??
+                        (data as DeliveryCondition)
+                          ?.condition_description
+                      : (data as Hub)?.hub_description ??
+                        (data as Driver)?.driver_name ??
+                        (data as Store)?.store_name ??
+                        (data as DeliveryStatus)?.status_thai ??
+                        (data as DeliveryCondition)
+                          ?.condition_description_thai}
+                  </Text>
                 </Pressable>
-              </View>
-            </>
-          ) : (
-            <ScrollView>
-              {!isEmpty(content) &&
-                content &&
-                content?.map((data, idx) => (
-                  <Pressable
-                    key={idx}
-                    onPress={(): void => {
-                      onSelect(data);
-                      onTouchOutside();
-                    }}
-                    style={({ pressed }): StyleProp<ViewStyle> => [
-                      styles.buttonContainer,
-                      {
-                        backgroundColor: pressed
-                          ? '#D9D9D9'
-                          : 'white',
-                      },
-                    ]}
-                  >
-                    <Text>
-                      {isEnglish
-                        ? (data as Hub)?.hub_description ??
-                          (data as Driver)?.driver_name ??
-                          (data as Store)?.store_name ??
-                          (data as DeliveryStatus)?.status_eng ??
-                          (data as DeliveryCondition)
-                            ?.condition_description
-                        : (data as Hub)?.hub_description ??
-                          (data as Driver)?.driver_name ??
-                          (data as Store)?.store_name ??
-                          (data as DeliveryStatus)?.status_thai ??
-                          (data as DeliveryCondition)
-                            ?.condition_description_thai}
-                    </Text>
-                  </Pressable>
-                ))}
-            </ScrollView>
-          )}
-        </View>
-      </>
+              ))}
+          </ScrollView>
+        )}
+      </View>
     </ModalContent>
   </RNBottomModal>
 );
@@ -145,6 +145,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     maxHeight: '90%',
+    padding: 0,
+    margin: 0,
     alignContent: 'center',
   },
   loadingContainer: {

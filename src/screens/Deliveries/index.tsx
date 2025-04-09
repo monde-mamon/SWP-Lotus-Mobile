@@ -1,8 +1,11 @@
-import { useIsFocused } from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+} from '@react-navigation/native';
 import { Tab, TabView } from '@rneui/themed';
 import { useAtom } from 'jotai';
-import { delay } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import { delay, first } from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 import { Header } from '../../components/Header';
@@ -11,7 +14,9 @@ import DeliveryStep1 from './tabs/step-1';
 import DeliveryStep2 from './tabs/step-2';
 import DeliveryStep3 from './tabs/step-3';
 import { languageAtom } from '@/src/atom';
+import CustomModal from '@/src/components/CustomModal';
 import { useBackHandler } from '@/src/hooks/use-back-handler';
+import { fetchCheckInStatusAtom } from '@/src/hooks/use-check-status';
 import { DeliveryScreenProps } from '@/src/navigation/types';
 
 const DeliveryScreen = ({
@@ -21,7 +26,39 @@ const DeliveryScreen = ({
   const [lang] = useAtom(languageAtom);
   const isFocused = useIsFocused();
   const [isRefreshing, setRefreshing] = useState<boolean>(false);
+  const [isCheckedInVisible, setIsCheckedInVisible] =
+    useState<boolean>(false);
   useBackHandler();
+
+  const [
+    {
+      data: fetchCheckInStatusData,
+      isRefetching: fetchCheckInStatusIsRefetching,
+      refetch: fetchCheckInStatusRefetch,
+    },
+  ] = useAtom(fetchCheckInStatusAtom);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchCheckInStatusRefetch();
+    }, [])
+  );
+
+  useEffect(() => {
+    if (
+      isFocused &&
+      fetchCheckInStatusData &&
+      'errors' in fetchCheckInStatusData
+    ) {
+      const firstError = first(
+        (fetchCheckInStatusData as { errors: string[] }).errors
+      );
+      if (firstError === 'Not Found') {
+        setIsCheckedInVisible(true);
+      }
+    }
+  }, [isFocused, fetchCheckInStatusIsRefetching]);
+
   useEffect(() => {
     delay(() => setIndex(0), 3000);
   }, []);
@@ -49,8 +86,19 @@ const DeliveryScreen = ({
       { cancelable: false }
     );
 
+  const redirectToCheckIn = (): void => {
+    setIsCheckedInVisible(false);
+    navigation.navigate('CheckIn');
+  };
+
   return (
     <View style={styles.container}>
+      <CustomModal
+        visible={isCheckedInVisible}
+        loading={false}
+        onTouchOutside={redirectToCheckIn}
+        text={'You need to check in first!'}
+      />
       <View style={{ padding: wp('4%') }}>
         <Header
           title={lang.deliveries}

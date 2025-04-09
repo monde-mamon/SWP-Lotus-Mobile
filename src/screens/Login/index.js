@@ -4,6 +4,7 @@ import {
   useIsFocused,
   useNavigation,
 } from '@react-navigation/native';
+import { compare } from 'compare-versions';
 import { useSetAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
 import {
@@ -154,17 +155,13 @@ const LoginScreen = (props) => {
       setTimeout(() => {
         const init = async () => {
           const data = await firebaseRemoteConfig();
-
-          // console.log('MONDEEEEE! : ', data);
-          // console.log('YOWYOYWI! L : ', DeviceInfo.getVersion());
           if (!data.IS_APPLICATION_ON) {
             navigation.push('Maintainance');
-            console.log('APP IS OFF');
-          } else if (data.APP_VERSION !== DeviceInfo.getVersion()) {
+          } else if (
+            !compare(data.APP_VERSION, DeviceInfo.getVersion(), '<=')
+          ) {
             navigation.push('Update', { data: data.BUILD_URL });
-            // console.log('APP VERSION IS NOT SAME');
           } else {
-            // console.log('WOWOWOW ANG GALING! : ', data.API_URL);
             setLocationConfig({
               timer: data.LOCATION_TIMER_INTERVAL,
             });
@@ -175,7 +172,6 @@ const LoginScreen = (props) => {
             }
 
             Services.retrieveData('user').then((res) => {
-              // console.log('token mo boi : ', res);
               if (!res || res.status === 'failed') {
                 setInitializing(true);
               } else {
@@ -284,11 +280,7 @@ const LoginScreen = (props) => {
                 />
               }
             />
-            {/* <View style={styles.alignSelfContainer}>
-              <TouchableOpacity>
-                <Text style={styles.forgotPass}> Forgot Password ?</Text>
-              </TouchableOpacity>
-            </View> */}
+
             <View style={styles.alignSelfContainer}>
               <Pressable
                 onPress={onProcess}
